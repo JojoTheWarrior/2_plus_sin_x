@@ -5,43 +5,51 @@ def f(x):
     return 2 + np.sin(x)
 
 N = 50
+M = 50
 SCALE = 1 / 10
 
 x_vals = np.linspace(0, 2 * np.pi, N)
+theta_vals = np.linspace(0, np.pi, M)
 y_vals = f(x_vals)
 
 
 vertices = []
 faces = []
 
+def joinFour(a, b, c, d):
+    faces.append([a, b, c])
+    faces.append([a, c, d])
+
+def joinThree(a, b, c):
+    faces.append([a, b, c])
+
 for z, y in enumerate(y_vals):
-    v0 = [SCALE * z, 0, 0]
-    v1 = [SCALE * z, y, 0]
-    v2 = [SCALE * z, y, 3*y]
-    v3 = [SCALE * z, 0, 3*y]
-    
+    # make N points along the semi circle
+    # center at [z * SCALE, y / 2, 0]
     ind = len(vertices)
-    vertices.extend([v0, v1, v2, v3])
 
-    # same face
-    faces.append([ind, ind+1, ind+2])
-    faces.append([ind, ind+2, ind+3])
+    # put in the center
+    vertices.append([z * SCALE, y / 2, 0])
 
-    # with past face
-    if z == 0: 
+    for theta in theta_vals:
+        vertices.append([z * SCALE, y/2 + (y/2 * np.cos(theta)), (y/2 * np.sin(theta))])
+
+    # faces with the center
+    for i in range(1, M):
+        joinThree(ind, ind+i, ind+i+1)
+    
+    # faces with the previous one
+    if z == 0:
         continue
-    # far
-    faces.append([ind+1, ind+2, ind-2])
-    faces.append([ind+1, ind-2, ind-3])
-    # near
-    faces.append([ind, ind+3, ind-1])
-    faces.append([ind, ind-1, ind-4])
-    # top
-    faces.append([ind+3, ind+2, ind-2])
-    faces.append([ind+3, ind-2, ind-1])
-    # bottom
-    faces.append([ind, ind+1, ind-3])
-    faces.append([ind, ind-3, ind-4])
+
+    pv = ind-M-1
+
+    for i in range(1, M):
+        joinFour(ind+i, ind+i+1, pv+i+1, pv+i)
+
+    # the floor
+    joinFour(ind+1, ind+M, pv+M, pv+1)
+
 
 vertices = np.array(vertices)
 faces = np.array(faces)
