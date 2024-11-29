@@ -17,8 +17,8 @@ faces = []
 for z, y in enumerate(y_vals):
     v0 = [SCALE * z, 0, 0]
     v1 = [SCALE * z, y, 0]
-    v2 = [SCALE * z, y, y]
-    v3 = [SCALE * z, 0, y]
+    v2 = [SCALE * z, y, 3*y]
+    v3 = [SCALE * z, 0, 3*y]
     
     ind = len(vertices)
     vertices.extend([v0, v1, v2, v3])
