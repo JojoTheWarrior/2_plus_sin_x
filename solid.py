@@ -4,9 +4,9 @@ from stl import mesh
 def f(x):
     return 2 + np.sin(x)
 
-N = 50
-M = 50
-SCALE = 1 / 10
+N = 25
+M = 10
+SCALE = 1 / 5
 
 x_vals = np.linspace(0, 2 * np.pi, N)
 theta_vals = np.linspace(0, np.pi, M)
