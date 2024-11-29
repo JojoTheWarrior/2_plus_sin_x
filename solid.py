@@ -4,12 +4,12 @@ from stl import mesh
 def f(x):
     return 2 + np.sin(x)
 
-N = 25
-M = 10
-SCALE = 1 / 5
+N = 50
+M = 50
+SCALE = 1 / 10
 
 x_vals = np.linspace(0, 2 * np.pi, N)
-theta_vals = np.linspace(0, np.pi, M)
+theta_vals = np.linspace(0, np.pi/2, M)
 y_vals = f(x_vals)
 
 
@@ -29,10 +29,10 @@ for z, y in enumerate(y_vals):
     ind = len(vertices)
 
     # put in the center
-    vertices.append([z * SCALE, y / 2, 0])
+    vertices.append([z * SCALE, 0, 0])
 
     for theta in theta_vals:
-        vertices.append([z * SCALE, y/2 + (y/2 * np.cos(theta)), (y/2 * np.sin(theta))])
+        vertices.append([z * SCALE, y/2 * np.cos(theta), (y/2 * np.sin(theta))])
 
     # faces with the center
     for i in range(1, M):
@@ -48,7 +48,10 @@ for z, y in enumerate(y_vals):
         joinFour(ind+i, ind+i+1, pv+i+1, pv+i)
 
     # the floor
-    joinFour(ind+1, ind+M, pv+M, pv+1)
+    joinFour(ind, ind+1, pv+1, pv)
+    
+    # the wall
+    joinFour(ind, ind+M, pv+M, pv)
 
 
 vertices = np.array(vertices)
