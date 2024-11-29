@@ -4,8 +4,8 @@ from stl import mesh
 def f(x):
     return 2 + np.sin(x)
 
-N = 50
-M = 50
+N = 15
+M = 12
 SCALE = 1 / 10
 
 x_vals = np.linspace(0, 2 * np.pi, N)
